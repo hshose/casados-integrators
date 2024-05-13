@@ -93,12 +93,12 @@ def main():
         "newton_iter": 10,
         "tol": 1e-8,
     }
-    test_forward_sim(integrator_opts)
-    test_jacobian(integrator_opts)
-    test_adjoint(integrator_opts)
+    # test_forward_sim(integrator_opts)
+    # test_jacobian(integrator_opts)
+    # test_adjoint(integrator_opts)
     # NOTE: either run ocp_nlp test or the ones above!
     # Some library is not unloaded properly.
-    # test_ocp_nlp(integrator_opts)
+    test_ocp_nlp(integrator_opts)
 
 
 if __name__ == "__main__":

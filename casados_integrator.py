@@ -57,12 +57,14 @@ class CasadosIntegrator(Callback):
     This makes it fully functional within CasADi NLPs
     """
 
-    def __init__(self, acados_sim: AcadosSim, use_cython=True, code_reuse=False):
+    def __init__(self, acados_sim: AcadosSim, json_file=None, generate=True, build=True, use_cython=False):
 
         check_casadi_version()
 
-        if use_cython:
+        if json_file is None:
             json_file = f"acados_sim_{acados_sim.model.name}.json"
+        if use_cython:
+            code_reuse = (not generate) and (not build)
             if not code_reuse:
                 AcadosSimSolver.generate(acados_sim, json_file=json_file)
                 AcadosSimSolver.build(
@@ -70,7 +72,7 @@ class CasadosIntegrator(Callback):
                 )
             self.acados_integrator = AcadosSimSolver.create_cython_solver(json_file)
         else:
-            self.acados_integrator = AcadosSimSolver(acados_sim)
+            self.acados_integrator = AcadosSimSolver(acados_sim, json_file=json_file, generate=generate, build=build)
 
         self.nx = casadi_length(acados_sim.model.x)
         self.nu = casadi_length(acados_sim.model.u)
